@@ -62,7 +62,7 @@ WiFiClient client;
 char ch;
 int i =0;
 int user_switch = 0;
-
+int distance = 0;
 void loop()
 {
 
@@ -79,14 +79,15 @@ void loop()
   if (measure.RangeStatus != 4) // 거리 측정이 정상적으로 이뤄진 경우
   { // phase failures have incorrect data
   Serial.print("Distance (mm): "); 
-  Serial.println(measure.RangeMilliMeter);
+  distance = measure.RangeMilliMeter;
+  Serial.println(distance);
   }
   else // 거리 측정이 정상적으로 이뤄지지 않은 경우
   {
   Serial.println(" out of range ");
   }
   if(user_switch == 0){
-    if(measure.RangeMilliMeter<1000){ // 물체가 300mm 이내에 있을 경우
+    if(distance<1000){ // 물체가 300mm 이내에 있을 경우
       digitalWrite(b_pin, LOW); // 빨간색 LED 점등
       delay(10000);
     }
@@ -106,7 +107,7 @@ void loop()
       //Serial.print(WiFi.status());
       ch = static_cast<char>(client.read());
       Serial.print(ch);
-      client.println(ch);
+      
 
       if(ch == 'a'){
         user_switch = 0;
@@ -115,7 +116,7 @@ void loop()
       else if(ch == 'b'){
         user_switch = 1;
       }
-      
+      client.print(distance);
     } 
     
 

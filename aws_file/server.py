@@ -13,11 +13,7 @@ nodemcu_client.bind(('', 8008))
 nodemcu_client.listen(1)
           
          
-conn1, addr1 = python_client.accept()
-print("python accepted!")
-        
-conn2, addr2 = nodemcu_client.accept()
-print("nodeMCU accepted!")
+
       
 while True:
     try:
@@ -26,15 +22,19 @@ while True:
     except :
         print("python connection has problem.")
         conn1, addr1 = python_client.accept()
+        print("python accepted!")
         
         data = conn1.recv(65535).decode()
         print(data)
 
     try:
         conn2.sendall(data.encode())
+        stat = conn2.recv.recv(65535).decode()
+        print(stat)
     except:
         print("nodeMCU connection has problem.")
         conn2, addr2 = nodemcu_client.accept()
+        print("nodeMCU accepted!")
         
         conn2.sendall(data.encode())
 
